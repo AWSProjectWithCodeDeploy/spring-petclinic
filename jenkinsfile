@@ -30,6 +30,7 @@ pipeline {
                 sh 'mvn -Dmaven.test.failure.ignore=true clean package' // test error 무시
             }
         }
+
         stage('SSH Publish') {
             steps {
                 echo 'SSH Publish'
