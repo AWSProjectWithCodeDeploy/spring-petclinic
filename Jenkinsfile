@@ -6,9 +6,9 @@ pipeline {
         jdk "JDK17"
     }
     
-    enviroment {
+    environment {
         DOCKERHUB_CREADENTIALS = credentials('dockerCredential')
-        }
+    }
     
     stages {
         stage('Git Clone'){
