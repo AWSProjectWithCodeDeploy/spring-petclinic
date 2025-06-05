@@ -13,25 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.springframework.samples.petclinic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportRuntimeHints;
+import org.springframework.context.annotation.Bean;
 
-/**
- * PetClinic Spring Boot Application.
- *
- * @author Dave Syer
- *
- */
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.config.MeterFilter;
+import io.micrometer.core.instrument.config.MeterRegistryConfig;
+import io.micrometer.core.instrument.MeterRegistryCustomizer;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
+import org.springframework.context.annotation.Bean;
+
 @SpringBootApplication
-@ImportRuntimeHints(PetClinicRuntimeHints.class)
 public class PetClinicApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PetClinicApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PetClinicApplication.class, args);
+    }
 
+    @Bean
+    MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+        return registry -> registry.config().commonTags("application", "spring-petclinic");
+    }
 }
+
