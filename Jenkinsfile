@@ -1,7 +1,7 @@
 pipeline {
   agent any
 
-  environment {vi
+  environment {
     DOCKER_IMAGE = "docker.io/sehun1004/project3-spring:latest"
     KUBE_NAMESPACE = "default"
   }
