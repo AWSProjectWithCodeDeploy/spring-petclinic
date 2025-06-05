@@ -9,6 +9,7 @@ pipeline {
   stages {
     stage('Clone Repository') {
       steps {
+        deleteDir()
         git branch: 'main', url: 'https://github.com/sehun100444/spring-petclinic.git'
       }
     }
