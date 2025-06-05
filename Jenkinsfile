@@ -9,44 +9,54 @@ pipeline {
   stages {
     stage('Clone Repository') {
       steps {
-        git branch: 'main', url: 'https://github.com/sehun100444/spring-petclinic.git'
+        dir('spring-petclinic') {
+          git branch: 'main', url: 'https://github.com/sehun100444/spring-petclinic.git'
+        }
       }
     }
 
     stage('Build Spring App') {
       steps {
-        sh 'mvn clean package -DskipTests'
+        dir('spring-petclinic') {
+          sh 'mvn clean package -DskipTests'
+        }
       }
     }
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t $DOCKER_IMAGE .'
+        dir('spring-petclinic') {
+          sh 'docker build -t $DOCKER_IMAGE .'
+        }
       }
     }
 
     stage('Push Docker Image') {
       steps {
-        withCredentials([usernamePassword(
-          credentialsId: 'project3-dockerhub',
-          usernameVariable: 'DOCKER_USERNAME',
-          passwordVariable: 'DOCKER_PASSWORD'
-        )]) {
-          sh '''
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker push $DOCKER_IMAGE
-          '''
+        dir('spring-petclinic') {
+          withCredentials([usernamePassword(
+            credentialsId: 'project3-dockerhub',
+            usernameVariable: 'DOCKER_USERNAME',
+            passwordVariable: 'DOCKER_PASSWORD'
+          )]) {
+            sh '''
+              echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+              docker push $DOCKER_IMAGE
+            '''
+          }
         }
       }
     }
 
     stage('Deploy to Kubernetes') {
       steps {
-        sh '''
-          kubectl apply -f spring-deployment.yaml
-          kubectl apply -f spring-service.yaml
-          kubectl apply -f ingress-spring.yaml
-        '''
+        dir('spring-petclinic') {
+          sh '''
+            kubectl apply -f spring-deployment.yaml
+            kubectl apply -f spring-service.yaml
+            kubectl apply -f ingress-spring.yaml
+          '''
+        }
       }
     }
   }
