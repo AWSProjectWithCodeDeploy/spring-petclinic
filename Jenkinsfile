@@ -44,9 +44,9 @@ pipeline {
     stage('Deploy to Kubernetes') {
       steps {
         sh '''
-          kubectl apply -f spring-deployment.yaml
-          kubectl apply -f spring-service.yaml
-          kubectl apply -f ingress-spring.yaml
+          kubectl apply -f k8s/spring-deployment.yaml
+          kubectl apply -f k8s/spring-service.yaml
+          kubectl apply -f k8s/ingress-spring.yaml
         '''
       }
     }
