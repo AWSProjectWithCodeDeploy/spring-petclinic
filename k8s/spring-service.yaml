@@ -5,7 +5,7 @@ metadata:
   name: spring-service
 spec:
   selector:
-    app: spring
+    app: spring-petclinic
   ports:
     - port: 80
       targetPort: 8080
